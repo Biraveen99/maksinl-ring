@@ -220,3 +220,181 @@ results['Random Forest Prediction'] = [
 
 print(results[['Sex', 'Age', 'Pclass', 'Survived',
                'Random Forest Prediction']].head(10))
+
+
+### oppg 3
+################### part 3
+
+c45_data = pd.read_csv(Path(__file__).with_name('titanic.csv'))
+
+c45_data = c45_data[
+    ['Survived', 'Pclass', 'Sex', 'Age', 'Fare', 'Embarked']
+].copy()
+
+# konvertering av tekst til tall
+c45_data['Sex'] = c45_data['Sex'].map({'male': 0, 'female': 1})
+c45_data['Embarked'] = c45_data['Embarked'].map({'S': 0, 'C': 1, 'Q': 2})
+
+# Fyller inn manglende verdier
+for column in c45_data.columns:
+    c45_data[column] = c45_data[column].fillna(
+        c45_data[column].median()
+    )
+
+c45_train, c45_test = train_test_split(
+    c45_data,
+    test_size=0.2,
+    random_state=42
+)
+
+def gain_ratio(data, feature, threshold):
+
+    left = data[data[feature] <= threshold]
+    right = data[data[feature] > threshold]
+
+    if len(left) == 0 or len(right) == 0:
+        return 0
+
+    total = len(data)
+
+    left_weight = len(left) / total
+    right_weight = len(right) / total
+
+    entropy_before = calculate_entropy(data)
+
+    entropy_after = (
+        left_weight * calculate_entropy(left)
+        + right_weight * calculate_entropy(right)
+    )
+
+    gain = entropy_before - entropy_after
+
+    split_info = -(
+        left_weight * np.log2(left_weight)
+        + right_weight * np.log2(right_weight)
+    )
+
+    return gain / split_info
+
+def best_c45_split(data):
+
+    best_gain = 0
+    best_feature = None
+    best_threshold = None
+
+    for feature in data.columns.drop('Survived'):
+
+        values = sorted(data[feature].unique())
+
+        for i in range(len(values) - 1):
+
+            threshold = (values[i] + values[i + 1]) / 2
+
+            gain = gain_ratio(data, feature, threshold)
+
+            if gain > best_gain:
+                best_gain = gain
+                best_feature = feature
+                best_threshold = threshold
+
+    return best_feature, best_threshold
+
+def build_c45_tree(data): #dette bygger C45 treet
+
+    majority = int(data['Survived'].mode()[0])
+
+    if data['Survived'].nunique() == 1:
+        return majority
+
+    feature, threshold = best_c45_split(data)
+
+    if feature is None:
+        return majority
+
+    left = data[data[feature] <= threshold]
+    right = data[data[feature] > threshold]
+
+    tree = {
+        'feature': feature,
+        'threshold': threshold,
+        'majority': majority,
+        'left': build_c45_tree(left),
+        'right': build_c45_tree(right)
+    }
+
+    return tree
+
+def predict_c45(tree, passenger):
+
+    if not isinstance(tree, dict):
+        return tree
+
+    feature = tree['feature']
+    threshold = tree['threshold']
+
+    if passenger[feature] <= threshold:
+        return predict_c45(tree['left'], passenger)
+
+    return predict_c45(tree['right'], passenger)
+
+def prune_tree(tree, validation):
+
+    if not isinstance(tree, dict) or len(validation) == 0:
+        return tree
+
+    feature = tree['feature']
+    threshold = tree['threshold']
+
+    left = validation[validation[feature] <= threshold]
+    right = validation[validation[feature] > threshold]
+
+    tree['left'] = prune_tree(tree['left'], left)
+    tree['right'] = prune_tree(tree['right'], right)
+
+    actual = validation['Survived']
+
+    predictions = [
+        predict_c45(tree, passenger)
+        for _, passenger in validation.iterrows()
+    ]
+
+    tree_accuracy = accuracy_score(actual, predictions)
+
+    majority_accuracy = accuracy_score(
+        actual,
+        [tree['majority']] * len(validation)
+    )
+
+    if majority_accuracy >= tree_accuracy:
+        return tree['majority']
+
+    return tree
+
+# Del treningsdata i trening og validering
+train_part, validation_part = train_test_split(
+    c45_train,
+    test_size=0.2,
+    random_state=42
+)
+
+# Bygg treet
+c45_tree = build_c45_tree(train_part)
+
+# Fjern unødvendige grener
+c45_tree = prune_tree(c45_tree, validation_part)
+
+# Prediksjoner
+c45_predictions = []
+
+for _, passenger in c45_test.iterrows():
+    prediction = predict_c45(c45_tree, passenger)
+    c45_predictions.append(prediction)
+
+# Accuracy
+c45_accuracy = accuracy_score(
+    c45_test['Survived'],
+    c45_predictions
+)
+
+print(f"C4.5 Accuracy: {c45_accuracy * 100:.2f}%")
+
