@@ -1,0 +1,12 @@
+PS C:\Users\birav\Desktop\git\UiA\IKT466-1_26H\Semesteroppgave> & c:\python315\python.exe c:/Users/birav/Desktop/git/UiA/IKT466-1_26H/Semesteroppgave/random_forest/main.py
+Dataset shape: (17379, 17)
+Missing values: 0
+Duplicate rows: 0
+Training rows: 12165
+Validation rows: 2607
+Test rows: 2607
+
+Random Forest - Validation Results
+MAE: 48.58
+RMSE: 75.97
+PS C:\Users\birav\Desktop\git\UiA\IKT466-1_26H\Semesteroppgave> 

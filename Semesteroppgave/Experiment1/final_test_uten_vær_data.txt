@@ -1,0 +1,36 @@
+PS C:\Users\birav\Desktop\git\UiA\IKT466-1_26H\Semesteroppgave> & c:\python315\python.exe c:/Users/birav/Desktop/git/UiA/IKT466-1_26H/Semesteroppgave/Experiment1/random_forest.py
+Dataset shape: (17379, 17)
+Missing values: 0
+Duplicate rows: 0
+Training rows: 12165
+Validation rows: 2607
+Test rows: 2607
+
+Random Forest - Validation Results
+MAE: 48.58
+RMSE: 75.97
+
+Random Forest - Test Results
+MAE: 49.90
+RMSE: 74.46
+PS C:\Users\birav\Desktop\git\UiA\IKT466-1_26H\Semesteroppgave> & c:\python315\python.exe c:/Users/birav/Desktop/git/UiA/IKT466-1_26H/Semesteroppgave/Experiment1/mlp3.py
+Epoch 200/2000 - Train Loss: 0.4257 - Validation Loss: 1.1860
+Epoch 400/2000 - Train Loss: 0.3161 - Validation Loss: 0.9935
+Epoch 600/2000 - Train Loss: 0.2108 - Validation Loss: 0.7291
+Epoch 800/2000 - Train Loss: 0.1224 - Validation Loss: 0.5079
+Epoch 1000/2000 - Train Loss: 0.0872 - Validation Loss: 0.3605
+Epoch 1200/2000 - Train Loss: 0.0688 - Validation Loss: 0.3117
+Epoch 1400/2000 - Train Loss: 0.0617 - Validation Loss: 0.2978
+Epoch 1600/2000 - Train Loss: 0.0587 - Validation Loss: 0.2946
+
+Early stopping at epoch 1765
+Best epoch: 1565
+
+MLP - Validation Results
+MAE: 56.31
+RMSE: 82.36
+
+MLP - Test Results
+MAE: 76.20
+RMSE: 108.35
+PS C:\Users\birav\Desktop\git\UiA\IKT466-1_26H\Semesteroppgave> 

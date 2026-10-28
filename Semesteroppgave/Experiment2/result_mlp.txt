@@ -1,0 +1,17 @@
+PS C:\Users\birav\Desktop\git\UiA\IKT466-1_26H\Semesteroppgave> & c:\python315\python.exe c:/Users/birav/Desktop/git/UiA/IKT466-1_26H/Semesteroppgave/Experiment2/mlp3.1.py
+Epoch 200/2000 - Train Loss: 0.4739 - Validation Loss: 1.2660
+Epoch 400/2000 - Train Loss: 0.3320 - Validation Loss: 0.9828
+Epoch 600/2000 - Train Loss: 0.2468 - Validation Loss: 0.9433
+Epoch 800/2000 - Train Loss: 0.1993 - Validation Loss: 0.9118
+Epoch 1000/2000 - Train Loss: 0.1734 - Validation Loss: 0.8301
+Epoch 1200/2000 - Train Loss: 0.1589 - Validation Loss: 0.7622
+Epoch 1400/2000 - Train Loss: 0.1476 - Validation Loss: 0.6922
+Epoch 1600/2000 - Train Loss: 0.1407 - Validation Loss: 0.6950
+
+Early stopping at epoch 1699
+Best epoch: 1499
+
+MLP - Validation Results
+MAE: 80.92
+RMSE: 126.13
+PS C:\Users\birav\Desktop\git\UiA\IKT466-1_26H\Semesteroppgave> 
