@@ -1,7 +1,8 @@
 
 from pathlib import Path
 from copy import deepcopy
-
+import matplotlib.pyplot as plt
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import torch
@@ -163,3 +164,32 @@ test_rmse = np.sqrt(mean_squared_error(test_actual, test_predictions))
 print("\nMLP - Test Results")
 print(f"MAE: {test_mae:.2f}")
 print(f"RMSE: {test_rmse:.2f}")
+
+
+# Plot predictions without weather features
+hours = 168
+
+plt.figure(figsize=(12, 5))
+plt.plot(
+    test_actual[:hours],
+    label="Actual rentals",
+    linewidth=2
+)
+plt.plot(
+    test_predictions[:hours],
+    label="MLP predictions",
+    linewidth=1.5
+)
+
+plt.title("MLP: Predictions Without Weather")
+plt.xlabel("Hour in test period")
+plt.ylabel("Number of bicycle rentals")
+plt.legend()
+plt.grid(alpha=0.3)
+plt.tight_layout()
+
+output = Path(__file__).resolve().parent / "mlp_predictions_no_weather.png"
+plt.savefig(output, dpi=300)
+plt.show()
+
+print(f"Graph saved to: {output}")

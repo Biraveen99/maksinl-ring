@@ -3,6 +3,8 @@ import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from math import sqrt
+import matplotlib.pyplot as plt
+from pathlib import Path
 
 # 1. Load the dataset
 df = pd.read_csv(
@@ -69,3 +71,28 @@ test_rmse = sqrt(mean_squared_error(y_test, test_predictions))
 print("\nRandom Forest - Test Results")
 print(f"MAE: {test_mae:.2f}")
 print(f"RMSE: {test_rmse:.2f}")
+
+
+
+# 8. Plot actual vs predicted rentals
+
+hours = 168  # First 7 days of the test set
+
+plt.figure(figsize=(12, 5))
+plt.plot(y_test.iloc[:hours].to_numpy(),
+         label="Actual rentals", linewidth=2)
+plt.plot(test_predictions[:hours],
+         label="Random Forest predictions", linewidth=1.5)
+
+plt.title("Random Forest: Actual vs Predicted Rentals")
+plt.xlabel("Hour in test period")
+plt.ylabel("Number of bicycle rentals")
+plt.legend()
+plt.grid(alpha=0.3)
+plt.tight_layout()
+
+output = Path(__file__).resolve().parent / "rf_predictions.png"
+plt.savefig(output, dpi=300)
+plt.show()
+
+print(f"Graph saved to: {output}")
